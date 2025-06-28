@@ -14,6 +14,7 @@ import { auth_context } from "../../../shared/context/auth_context";
 import { Httprequest } from "../../../shared/hooks/Http-hook";
 import ErrorModal from "../../../shared/components/loading/ErrorModal";
 import LoadingSpinner from "../../../shared/components/loading/LoadingSpinner";
+import ImageUpload from "../../../shared/components/FormElements/imagehandler/ImageUpload";
 
 const Auth = () => {
   const auth = useContext(auth_context);
@@ -40,6 +41,7 @@ const Auth = () => {
         {
           ...formState.inputs,
           name: undefined,
+          image: undefined,
         },
         formState.inputs.email.isValid && formState.inputs.password.isValid
       );
@@ -51,6 +53,10 @@ const Auth = () => {
             value: "",
             isValid: false,
           },
+          image: {
+            value: null,
+            isValid: false,
+          },
         },
         false
       );
@@ -60,10 +66,10 @@ const Auth = () => {
 
   const authSubmitHandler = async (event) => {
     event.preventDefault();
-
+    console.log(formState.inputs);
     if (isLoginMode) {
       try {
-        const responseData=await request(
+        const responseData = await request(
           "http://localhost:5000/api/user/login",
           "POST",
           JSON.stringify({
@@ -79,7 +85,7 @@ const Auth = () => {
       } catch (err) {}
     } else {
       try {
-        const responseData=await request(
+        const responseData = await request(
           "http://localhost:5000/api/user/singup",
           "POST",
           JSON.stringify({
@@ -115,6 +121,9 @@ const Auth = () => {
               errorText="Please enter a name."
               OnInput={inputHandler}
             />
+          )}
+          {!isLoginMode && (
+            <ImageUpload center id="image" OnInput={inputHandler} />
           )}
           <Input
             element="input"
