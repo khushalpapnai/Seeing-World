@@ -36,17 +36,6 @@ App.use((error, req, res, next) => {
   res.status(error.code || 500);
   res.json({ message: error.message || "no respose from server" });
 });
-App.use((req, res, next) => {
-  const error = new Httperror("this place couldnot be found", 404);
-  throw error;
-});
-App.use((error, req, res, next) => {
-  if (res.headerSent) {
-    return next(error);
-  }
-  res.status(error.code || 500);
-  res.json({ message: error.message || "no respose from server" });
-});
 
 {
   mongoose
