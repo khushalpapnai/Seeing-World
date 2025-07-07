@@ -1,5 +1,6 @@
 const express = require("express");
 const App = express();
+const path = require('path');
 const place_server = require("./routes/place_server");
 const user_server = require("./routes/user_server");
 const bodyparser = require("body-parser");
@@ -23,6 +24,18 @@ App.use((req, res, next) => {
 
 App.use("/api/places", place_server);
 App.use("/api/user", user_server);
+// Serve frontend
+App.use(express.static(path.join(__dirname, 'front', 'build')));
+App.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'front', 'build', 'index.html'));
+});
+
+// Error handler
+App.use((error, req, res, next) => {
+  if (res.headerSent) return next(error);
+  res.status(error.code || 500);
+  res.json({ message: error.message || "no respose from server" });
+});
 App.use((req, res, next) => {
   const error = new Httperror("this place couldnot be found", 404);
   throw error;
