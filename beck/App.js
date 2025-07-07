@@ -42,10 +42,11 @@ App.use((error, req, res, next) => {
     .connect(
       "mongodb+srv://howoneknows:LQz5H4tJeYdvkvfD@cluster0.rhqikqb.mongodb.net/Mern?retryWrites=true&w=majority&tls=true"
     )
-    .then(() => {
-      App.listen(5000);
-      console.log("connected to beckend");
-    })
+    const PORT = process.env.PORT || 5000;
+    App.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+    });
+
     .catch((err) => {
       console.log("faild to connect", err);
     });
